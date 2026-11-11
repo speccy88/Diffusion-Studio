@@ -1,0 +1,74 @@
+// !$*UTF8*$!
+{
+    archiveVersion = 1;
+    classes = {};
+    objectVersion = 60;
+    objects = {
+
+/* Begin PBXBuildFile section */
+        58534143AB4B419A97233A07 /* DreamLiteDesktopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C83F7E3F8A84780B0977141 /* DreamLiteDesktopApp.swift */; };
+        7EA081A2034E45E8A9DC1B12 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545BFB6176434493905CC674 /* ContentView.swift */; };
+        D3B42C8104614D98810A6941 /* DreamLiteWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB3552246D478493BC84B4 /* DreamLiteWorker.swift */; };
+        C1C339D319814959ACFF4342 /* server.py in Resources */ = {isa = PBXBuildFile; fileRef = 4BC0D853A48A44A583E9760A /* server.py */; };
+        A73EEB10BF0B440AB20EEC21 /* DiffusionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73EEB10BF0B440AB20EEC22 /* DiffusionGenerator.swift */; };
+        A73EEB10BF0B440AB20EEC23 /* CoreAIDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = A73EEB10BF0B440AB20EEC24 /* CoreAIDiffusion */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+        7C83F7E3F8A84780B0977141 /* DreamLiteDesktopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DreamLiteDesktopApp.swift; sourceTree = "<group>"; };
+        545BFB6176434493905CC674 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+        6CFB3552246D478493BC84B4 /* DreamLiteWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DreamLiteWorker.swift; sourceTree = "<group>"; };
+        4BC0D853A48A44A583E9760A /* server.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = server.py; path = backend/server.py; sourceTree = SOURCE_ROOT; };
+        8866F0CC721E43BB9046791D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+        FAE8657BC2D640BA86D265FE /* DreamLiteDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Diffusion Studio.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+        A73EEB10BF0B440AB20EEC22 /* DiffusionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffusionGenerator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+        8606E7D7EBB94962BCB298C6 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A73EEB10BF0B440AB20EEC23 /* CoreAIDiffusion in Frameworks */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+        A1E88A4AA9F043F398377750 = {isa = PBXGroup; children = (C7849B4D6F9B44A1904F17FB /* DreamLiteDesktop */, 4BC0D853A48A44A583E9760A /* server.py */, 2DBC47FC8CB94D278DAB4BA5 /* Products */, ); sourceTree = "<group>"; };
+        C7849B4D6F9B44A1904F17FB /* DreamLiteDesktop */ = {isa = PBXGroup; children = (7C83F7E3F8A84780B0977141 /* DreamLiteDesktopApp.swift */, 545BFB6176434493905CC674 /* ContentView.swift */, 6CFB3552246D478493BC84B4 /* DreamLiteWorker.swift */, A73EEB10BF0B440AB20EEC22 /* DiffusionGenerator.swift */, 8866F0CC721E43BB9046791D /* Info.plist */, ); path = DreamLiteDesktop; sourceTree = "<group>"; };
+        2DBC47FC8CB94D278DAB4BA5 /* Products */ = {isa = PBXGroup; children = (FAE8657BC2D640BA86D265FE /* DreamLiteDesktop.app */, ); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+        5591FCBA25A64DA288AB8366 /* DreamLiteDesktop */ = {isa = PBXNativeTarget; buildConfigurationList = EBCF4D1327A143CD91F02C29 /* Build configuration list for PBXNativeTarget "DreamLiteDesktop" */; buildPhases = (BA6ECC8D2F894FD4AE8B932F /* Sources */, 8606E7D7EBB94962BCB298C6 /* Frameworks */, 201C9CBD54404B51B12E7801 /* Resources */, ); buildRules = ( ); dependencies = ( ); packageProductDependencies = (A73EEB10BF0B440AB20EEC24 /* CoreAIDiffusion */, ); name = DreamLiteDesktop; productName = DreamLiteDesktop; productReference = FAE8657BC2D640BA86D265FE /* DreamLiteDesktop.app */; productType = "com.apple.product-type.application"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+        25C2F56A59E54DDD9F425C24 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 2700; TargetAttributes = {5591FCBA25A64DA288AB8366 = {CreatedOnToolsVersion = 27.0; }; }; }; buildConfigurationList = F64A618BAEDB4AF5BC4F7434 /* Build configuration list for PBXProject "DreamLiteDesktop" */; compatibilityVersion = "Xcode 15.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base, ); mainGroup = A1E88A4AA9F043F398377750; productRefGroup = 2DBC47FC8CB94D278DAB4BA5 /* Products */; packageReferences = (A73EEB10BF0B440AB20EEC25 /* coreai-models */, ); projectDirPath = ""; projectRoot = ""; targets = (5591FCBA25A64DA288AB8366 /* DreamLiteDesktop */, ); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+        201C9CBD54404B51B12E7801 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (C1C339D319814959ACFF4342 /* server.py in Resources */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+        BA6ECC8D2F894FD4AE8B932F /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (58534143AB4B419A97233A07 /* DreamLiteDesktopApp.swift in Sources */, 7EA081A2034E45E8A9DC1B12 /* ContentView.swift in Sources */, D3B42C8104614D98810A6941 /* DreamLiteWorker.swift in Sources */, A73EEB10BF0B440AB20EEC21 /* DiffusionGenerator.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+        84703FD176284F50B111ADAF /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGNING_ALLOWED = NO; MACOSX_DEPLOYMENT_TARGET = 27.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; name = Debug; };
+        D7C193C7F7D04DA48CFEBA95 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGNING_ALLOWED = NO; MACOSX_DEPLOYMENT_TARGET = 27.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; SWIFT_COMPILATION_MODE = wholemodule; }; name = Release; };
+        419CC5F9F959490AB2956D2C /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGNING_ALLOWED = NO; CURRENT_PROJECT_VERSION = 1; ENABLE_HARDENED_RUNTIME = NO; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = DreamLiteDesktop/Info.plist; MACOSX_DEPLOYMENT_TARGET = 27.0; PRODUCT_BUNDLE_IDENTIFIER = local.diffusion.studio; PRODUCT_NAME = "Diffusion Studio"; SDKROOT = macosx; SWIFT_VERSION = 5.0; SUPPORTED_PLATFORMS = macosx; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; }; name = Debug; };
+        C3535D20641E4AE9B0F2DD79 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGNING_ALLOWED = NO; CURRENT_PROJECT_VERSION = 1; ENABLE_HARDENED_RUNTIME = NO; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = DreamLiteDesktop/Info.plist; MACOSX_DEPLOYMENT_TARGET = 27.0; PRODUCT_BUNDLE_IDENTIFIER = local.diffusion.studio; PRODUCT_NAME = "Diffusion Studio"; SDKROOT = macosx; SWIFT_VERSION = 5.0; SUPPORTED_PLATFORMS = macosx; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+        A73EEB10BF0B440AB20EEC25 /* coreai-models */ = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/apple/coreai-models.git"; requirement = {kind = revision; revision = e7b356c574b71f994ad0ea8341ac907534b3e337; }; };
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+        A73EEB10BF0B440AB20EEC24 /* CoreAIDiffusion */ = {isa = XCSwiftPackageProductDependency; package = A73EEB10BF0B440AB20EEC25 /* coreai-models */; productName = CoreAIDiffusion; };
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCConfigurationList section */
+        F64A618BAEDB4AF5BC4F7434 /* Build configuration list for PBXProject "DreamLiteDesktop" */ = {isa = XCConfigurationList; buildConfigurations = (84703FD176284F50B111ADAF /* Debug */, D7C193C7F7D04DA48CFEBA95 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+        EBCF4D1327A143CD91F02C29 /* Build configuration list for PBXNativeTarget "DreamLiteDesktop" */ = {isa = XCConfigurationList; buildConfigurations = (419CC5F9F959490AB2956D2C /* Debug */, C3535D20641E4AE9B0F2DD79 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+    };
+    rootObject = 25C2F56A59E54DDD9F425C24 /* Project object */;
+}
