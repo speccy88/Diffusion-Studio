@@ -50,7 +50,7 @@ private enum GenerationError: LocalizedError {
         case .busy: "An image is already being generated."
         case .invalidPrompt: "Prompt must be between 1 and 2000 characters."
         case .invalidSeed: "Seed must be an integer between 0 and 4294967295."
-        case .missingSana: "Run setup-sana.sh in the project folder to prepare SANA Sprint."
+        case .missingSana: "Run setup-sana.sh in the Diffusion Studio folder to prepare SANA Sprint."
         case .missingImage: "The model could not produce a PNG image."
         }
     }
@@ -62,7 +62,10 @@ private actor SanaGenerator {
 
     init() {
         modelURL = (Bundle.main.object(forInfoDictionaryKey: "SanaModelPath") as? String)
-            .map { URL(fileURLWithPath: $0, isDirectory: true) }
+            .map {
+                URL(fileURLWithPath: $0, isDirectory: true,
+                    relativeTo: Bundle.main.bundleURL.deletingLastPathComponent()).standardizedFileURL
+            }
     }
 
     func unload() async {

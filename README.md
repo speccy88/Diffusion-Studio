@@ -10,6 +10,10 @@ DreamLite uses PyTorch/Diffusers on MPS through an automatically managed Python 
 
 Requires Apple Silicon, macOS 27 or later, and Xcode 27 to build.
 
+## Download a release
+
+Download the macOS ARM64 ZIP from [GitHub Releases](https://github.com/speccy88/Diffusion-Studio/releases). It contains the compiled app and setup scripts. Follow the included INSTALL.md to prepare DreamLite or SANA Sprint. Model weights are downloaded during setup. Release builds use dependencies beside the app and are ad-hoc signed, without Apple notarization.
+
 The DreamLite pipeline has a 0.39B-parameter UNet; the full system additionally loads a Qwen vision-language text encoder and other components. On an M2 Mac with 16 GB RAM, memory/performance can be a constraint. The upstream iPhone 17 Pro benchmark does not predict macOS PyTorch/MPS performance.
 
 ## Build and launch
@@ -108,3 +112,7 @@ mkdir -p build
 xcrun swiftc -parse-as-library DreamLiteDesktop/SessionGallery.swift tests/test_gallery.swift -o build/gallery-tests
 build/gallery-tests
 ```
+
+## Package a release
+
+Run `./package-release.sh` to build the ARM64 app and produce a ZIP and SHA-256 checksum under `build/releases/`. The archive contains setup scripts, installation instructions, and dependency licenses. The packager configures dependency paths relative to the app's folder and applies an ad-hoc signature.

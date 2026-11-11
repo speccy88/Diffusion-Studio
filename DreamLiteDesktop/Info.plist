@@ -9,7 +9,7 @@
     <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
     <key>CFBundleDisplayName</key><string>Diffusion Studio</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>CFBundleShortVersionString</key><string>1.0.0</string>
     <key>CFBundleVersion</key><string>1</string>
     <key>LSMinimumSystemVersion</key><string>$(MACOSX_DEPLOYMENT_TARGET)</string>
     <key>DreamLitePythonPath</key><string>$(PROJECT_DIR)/backend/.venv/bin/python3</string>

@@ -37,7 +37,7 @@ private enum WorkerError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .pythonMissing: "Run backend/setup-mac.sh in the project folder to set up Python."
+        case .pythonMissing: "Run backend/setup-mac.sh in the Diffusion Studio folder to set up Python."
         case .scriptMissing: "The app is missing its Python worker. Rebuild Diffusion Studio."
         case .disconnected: "The Python worker stopped. Try generating again."
         case .invalidReply: "DreamLite received an invalid reply from the Python worker."
@@ -97,8 +97,12 @@ final class DreamLiteWorker {
     private func start() throws -> Connection {
         if let connection, connection.process.isRunning { return connection }
 
-        guard let path = Bundle.main.object(forInfoDictionaryKey: "DreamLitePythonPath") as? String,
-              FileManager.default.isExecutableFile(atPath: path) else {
+        guard let path = Bundle.main.object(forInfoDictionaryKey: "DreamLitePythonPath") as? String else {
+            throw WorkerError.pythonMissing
+        }
+        let pythonURL = URL(fileURLWithPath: path,
+                            relativeTo: Bundle.main.bundleURL.deletingLastPathComponent()).standardizedFileURL
+        guard FileManager.default.isExecutableFile(atPath: pythonURL.path) else {
             throw WorkerError.pythonMissing
         }
         guard let script = Bundle.main.url(forResource: "server", withExtension: "py") else {
@@ -113,7 +117,7 @@ final class DreamLiteWorker {
         }
 
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: path)
+        process.executableURL = pythonURL
         process.arguments = ["-u", script.path, "--stdio"]
         let arguments = CommandLine.arguments
         if arguments.contains("--demo") {
