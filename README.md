@@ -2,6 +2,10 @@
 
 A native SwiftUI macOS app for generating and saving images with DreamLite-Mobile and SANA Sprint. Use the model selector above the prompt to switch between them. Your prompt, seed, and DreamLite resolution are retained when switching.
 
+Each generated image is added to the thumbnail strip below the preview. Click a thumbnail or use the previous/next buttons to browse. After clicking the strip, the left/right arrow keys also navigate. **Save PNG…** exports the selected image. Hover over a thumbnail to see its prompt, seed, and resolution.
+
+History is shared across the app's windows and model switches for the current session. Full PNGs are stored in a temporary folder and small thumbnails stay in memory. Quitting clears the session folder. Use **Save PNG…** to keep images permanently. If temporary storage fails, the image is retained in memory so it can still be saved.
+
 DreamLite uses PyTorch/Diffusers on MPS through an automatically managed Python worker and private process pipes. SANA Sprint 0.6B runs inside the app using Apple's Core AI diffusion pipeline. SANA generates 1024 × 1024 images in two steps. The app releases the previous model before loading the selected one.
 
 Requires Apple Silicon, macOS 27 or later, and Xcode 27 to build.
@@ -96,3 +100,11 @@ SANA Sprint's model card lists Apache 2.0. Apple's Core AI pipeline is distribut
 ## Testing
 
 Run `backend/.venv/bin/python3 -m unittest discover -s tests -v` from the project root to test the demo worker and HTTP API. Leave port 8766 free for the HTTP tests.
+
+Run the session gallery checks from the project root:
+
+```bash
+mkdir -p build
+xcrun swiftc -parse-as-library DreamLiteDesktop/SessionGallery.swift tests/test_gallery.swift -o build/gallery-tests
+build/gallery-tests
+```
