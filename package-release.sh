@@ -15,13 +15,12 @@ xcodebuild -project DreamLiteDesktop.xcodeproj -scheme DreamLiteDesktop \
 STAGING_DIR=$(mktemp -d "$PROJECT_DIR/build/release-stage.XXXXXX")
 trap 'rm -rf "$STAGING_DIR"' EXIT
 RELEASE_DIR="$STAGING_DIR/Diffusion Studio"
-mkdir -p "$RELEASE_DIR/backend"
+mkdir -p "$RELEASE_DIR"
 ditto "$PRODUCTS_DIR/Diffusion Studio.app" "$RELEASE_DIR/Diffusion Studio.app"
-cp backend/server.py backend/*.sh "$RELEASE_DIR/backend/"
-cp setup-sana.sh README.md "$RELEASE_DIR/"
+cp README.md "$RELEASE_DIR/"
 cp RELEASE-INSTALL.md "$RELEASE_DIR/INSTALL.md"
 
-# Resolve dependencies beside the extracted app, independently of the build machine.
+# Keep support for assets from older releases placed beside the app.
 APP_PLIST="$RELEASE_DIR/Diffusion Studio.app/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c 'Set DreamLitePythonPath backend/.venv/bin/python3' "$APP_PLIST"
 /usr/libexec/PlistBuddy -c 'Set SanaModelPath models/Sana_Sprint_0.6B_1024px_diffusers' "$APP_PLIST"

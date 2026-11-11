@@ -5,6 +5,7 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @ObservedObject var generator: DiffusionGenerator
     @ObservedObject var gallery: SessionGallery
+    @ObservedObject var setup: ModelSetup
     @AppStorage("selectedDiffusionModel") private var selectedModel = DiffusionModel.dreamLite
 
     @State private var prompt = "A small wooden cabin beside a mountain lake at sunrise, detailed natural lighting"
@@ -58,88 +59,13 @@ struct ContentView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .disabled(generating)
+            .disabled(generating || setup.activity != nil)
             .accessibilityLabel("Diffusion model")
 
-            Text("Prompt")
-                .font(.headline)
-            TextEditor(text: $prompt)
-                .font(.body)
-                .scrollContentBackground(.hidden)
-                .padding(9)
-                .frame(height: 180)
-                .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
-                .accessibilityLabel("Text-to-image prompt")
-                .disabled(generating)
-
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Resolution")
-                        .font(.headline)
-                    if selectedModel == .sanaSprint {
-                        Text("1024 × 1024")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        Picker("Resolution", selection: $resolution) {
-                            Text("512 × 512").tag(512)
-                            Text("768 × 768").tag(768)
-                            Text("1024 × 1024").tag(1024)
-                        }
-                        .labelsHidden()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .disabled(generating)
-                    }
-                }
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Seed")
-                        .font(.headline)
-                    TextField("Seed", value: $seed, format: .number)
-                        .textFieldStyle(.roundedBorder)
-                        .disabled(generating)
-                }
-            }
-
-            Button {
-                Task { await generate() }
-            } label: {
-                HStack(spacing: 9) {
-                    if generating { ProgressView().controlSize(.small) }
-                    Text(generating ? "Generating…" : "Generate image")
-                        .frame(maxWidth: .infinity)
-                }
-                .padding(.vertical, 5)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(generating || prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            .keyboardShortcut(.return, modifiers: .command)
-
-            if generating {
-                Text("The first image after switching models includes model loading.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Divider()
-
-            Text(status)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .textSelection(.enabled)
-
-            if let elapsed {
-                Text(String(format: "Last request: %.1f seconds", elapsed))
-                    .font(.caption.monospacedDigit())
-            }
-
-            if let errorMessage {
-                Text(errorMessage)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .textSelection(.enabled)
-                    .padding(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.red.opacity(0.07), in: RoundedRectangle(cornerRadius: 8))
+            if setup.activity == nil, setup.isReady(selectedModel) {
+                generationControls
+            } else {
+                downloadControls
             }
 
             Spacer(minLength: 0)
@@ -149,6 +75,135 @@ struct ContentView: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(22)
+    }
+
+    @ViewBuilder
+    private var generationControls: some View {
+        Text("Prompt")
+            .font(.headline)
+        TextEditor(text: $prompt)
+            .font(.body)
+            .scrollContentBackground(.hidden)
+            .padding(9)
+            .frame(height: 180)
+            .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+            .accessibilityLabel("Text-to-image prompt")
+            .disabled(generating)
+
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Resolution")
+                    .font(.headline)
+                if selectedModel == .sanaSprint {
+                    Text("1024 × 1024")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Picker("Resolution", selection: $resolution) {
+                        Text("512 × 512").tag(512)
+                        Text("768 × 768").tag(768)
+                        Text("1024 × 1024").tag(1024)
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .disabled(generating)
+                }
+            }
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Seed")
+                    .font(.headline)
+                TextField("Seed", value: $seed, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .disabled(generating)
+            }
+        }
+
+        Button {
+            Task { await generate() }
+        } label: {
+            HStack(spacing: 9) {
+                if generating { ProgressView().controlSize(.small) }
+                Text(generating ? "Generating…" : "Generate image")
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.vertical, 5)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        .disabled(generating || setup.activity != nil || prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        .keyboardShortcut(.return, modifiers: .command)
+
+        if generating {
+            Text("The first image after switching models includes model loading.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+
+        Divider()
+
+        Text(status)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .textSelection(.enabled)
+
+        if let elapsed {
+            Text(String(format: "Last request: %.1f seconds", elapsed))
+                .font(.caption.monospacedDigit())
+        }
+
+        if let errorMessage {
+            Text(errorMessage)
+                .font(.caption)
+                .foregroundStyle(.red)
+                .textSelection(.enabled)
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.red.opacity(0.07), in: RoundedRectangle(cornerRadius: 8))
+        }
+    }
+
+    private var downloadControls: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let activity = setup.activity {
+                Text(activity.stage)
+                    .font(.headline)
+                if activity.total > 0 {
+                    ProgressView(value: Double(activity.completed), total: Double(activity.total)) {
+                        Text("\(activity.completed) of \(activity.total) files")
+                    }
+                } else {
+                    ProgressView().progressViewStyle(.linear)
+                }
+            } else {
+                Text("Download \(selectedModel.name) to start generating images.")
+                    .font(.headline)
+                Text("Setup uses several gigabytes of storage.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                if let failure = setup.failures[selectedModel] {
+                    Text(failure)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                    let log = setup.logURL(for: selectedModel)
+                    if FileManager.default.fileExists(atPath: log.path) {
+                        Button("View setup log") { NSWorkspace.shared.open(log) }
+                    }
+                }
+                Button {
+                    let model = selectedModel
+                    Task { await setup.install(model) }
+                } label: {
+                    Label(setup.failures[selectedModel] == nil ? "Download \(selectedModel.name)" : "Retry download",
+                          systemImage: "arrow.down.circle")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(generating)
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
     }
 
     private var preview: some View {
@@ -175,7 +230,7 @@ struct ContentView: View {
                         .interpolation(.high)
                         .scaledToFit()
                         .padding(18)
-                } else {
+                } else if setup.isReady(selectedModel) {
                     VStack(spacing: 12) {
                         Image(systemName: "photo.artframe")
                             .font(.system(size: 64, weight: .ultraLight))
@@ -187,6 +242,10 @@ struct ContentView: View {
                             .font(.subheadline)
                             .foregroundStyle(.tertiary)
                     }
+                } else {
+                    Image(systemName: "photo.artframe")
+                        .font(.system(size: 64, weight: .ultraLight))
+                        .foregroundStyle(.secondary)
                 }
                 if generating && displayedImage == nil {
                     Rectangle()
@@ -298,6 +357,7 @@ struct ContentView: View {
 
     @MainActor
     private func generate() async {
+        guard setup.activity == nil, setup.isReady(selectedModel) else { return }
         let model = selectedModel
         let requestPrompt = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         let requestSeed = seed

@@ -5,9 +5,15 @@ import SwiftUI
 final class DreamLiteAppDelegate: NSObject, NSApplicationDelegate {
     let generator = DiffusionGenerator()
     let gallery = SessionGallery()
+    let setup = ModelSetup()
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        setup.refresh()
+    }
 
     func applicationWillTerminate(_ notification: Notification) {
         generator.stop()
+        setup.stop()
         gallery.cleanUp()
     }
 }
@@ -18,7 +24,7 @@ struct DreamLiteDesktopApp: App {
 
     var body: some Scene {
         WindowGroup("Diffusion Studio") {
-            ContentView(generator: delegate.generator, gallery: delegate.gallery)
+            ContentView(generator: delegate.generator, gallery: delegate.gallery, setup: delegate.setup)
         }
         .defaultSize(width: 1050, height: 760)
     }

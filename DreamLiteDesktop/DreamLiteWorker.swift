@@ -37,7 +37,7 @@ private enum WorkerError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .pythonMissing: "Run backend/setup-mac.sh in the Diffusion Studio folder to set up Python."
+        case .pythonMissing: "Download DreamLite from the model panel to set up its runtime."
         case .scriptMissing: "The app is missing its Python worker. Rebuild Diffusion Studio."
         case .disconnected: "The Python worker stopped. Try generating again."
         case .invalidReply: "DreamLite received an invalid reply from the Python worker."
@@ -97,12 +97,7 @@ final class DreamLiteWorker {
     private func start() throws -> Connection {
         if let connection, connection.process.isRunning { return connection }
 
-        guard let path = Bundle.main.object(forInfoDictionaryKey: "DreamLitePythonPath") as? String else {
-            throw WorkerError.pythonMissing
-        }
-        let pythonURL = URL(fileURLWithPath: path,
-                            relativeTo: Bundle.main.bundleURL.deletingLastPathComponent()).standardizedFileURL
-        guard FileManager.default.isExecutableFile(atPath: pythonURL.path) else {
+        guard let pythonURL = ModelFiles.dreamLitePython else {
             throw WorkerError.pythonMissing
         }
         guard let script = Bundle.main.url(forResource: "server", withExtension: "py") else {
@@ -119,12 +114,11 @@ final class DreamLiteWorker {
         let process = Process()
         process.executableURL = pythonURL
         process.arguments = ["-u", script.path, "--stdio"]
-        let arguments = CommandLine.arguments
-        if arguments.contains("--demo") {
+        if ModelFiles.demo {
             process.arguments?.append("--demo")
         }
-        if let index = arguments.firstIndex(of: "--model-path"), index + 1 < arguments.count {
-            process.arguments?.append(contentsOf: ["--model-path", arguments[index + 1]])
+        if let modelURL = ModelFiles.dreamLiteModel {
+            process.arguments?.append(contentsOf: ["--model-path", modelURL.path])
         }
         process.standardInput = requests
         process.standardOutput = replies

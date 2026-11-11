@@ -50,7 +50,7 @@ private enum GenerationError: LocalizedError {
         case .busy: "An image is already being generated."
         case .invalidPrompt: "Prompt must be between 1 and 2000 characters."
         case .invalidSeed: "Seed must be an integer between 0 and 4294967295."
-        case .missingSana: "Run setup-sana.sh in the Diffusion Studio folder to prepare SANA Sprint."
+        case .missingSana: "Download SANA Sprint from the model panel to prepare it."
         case .missingImage: "The model could not produce a PNG image."
         }
     }
@@ -58,15 +58,6 @@ private enum GenerationError: LocalizedError {
 
 private actor SanaGenerator {
     private var pipeline: FlowTransformerPipeline?
-    private let modelURL: URL?
-
-    init() {
-        modelURL = (Bundle.main.object(forInfoDictionaryKey: "SanaModelPath") as? String)
-            .map {
-                URL(fileURLWithPath: $0, isDirectory: true,
-                    relativeTo: Bundle.main.bundleURL.deletingLastPathComponent()).standardizedFileURL
-            }
-    }
 
     func unload() async {
         await pipeline?.unloadResources()
@@ -75,8 +66,7 @@ private actor SanaGenerator {
 
     func generate(prompt: String, seed: UInt32) async throws -> Data {
         if pipeline == nil {
-            guard let modelURL,
-                  FileManager.default.fileExists(atPath: modelURL.appendingPathComponent("metadata.json").path) else {
+            guard let modelURL = ModelFiles.sanaModel else {
                 throw GenerationError.missingSana
             }
             pipeline = try await FlowTransformerPipeline(from: modelURL, mode: .full)
